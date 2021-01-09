@@ -18,6 +18,19 @@ class GameBoard {
         }
       }
     }
+    this.unknownCell= -1;
+  }
+
+  stateStateFromArray(grid){
+    this.numberOfRows = grid.length;
+    this.numberOfCols = grid[0].length;
+    // create grid 2 d grid
+    this.cells = grid.map(row => {
+      return row.map(cell => {
+        // if empty string, place a -1
+        return cell === ' ' ? this.unknownCell : parseInt(cell);
+      });
+    });
   }
   // 
   cellContents(col,row) {

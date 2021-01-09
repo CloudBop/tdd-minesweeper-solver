@@ -33,5 +33,26 @@ describe('Tests for the Game', () => {
     expect(result.cell1).toEqual(7)
     expect(result.cell2).toEqual(1)
   })
-  
+
+
+  test('should set cells from 2d array', ()=>{
+
+    const initialState = [new Array(3),new Array(3)]
+    const currentGame = new GameBoard(initialState)
+    //
+    currentGame.stateStateFromArray([
+      ["0", " ", " " ," "],
+      [" ", "8", " " ,"4"]
+    ])
+
+    const result= {
+      cell1: currentGame.cellContents(0,0),
+      cell2: currentGame.cellContents(1,1),
+      cell3: currentGame.cellContents(3,1),
+    }
+
+    expect(result.cell1).toEqual(0)
+    expect(result.cell2).toEqual(8)
+    expect(result.cell3).toEqual(4)
+  })
 })

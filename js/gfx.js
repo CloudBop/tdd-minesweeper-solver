@@ -3,6 +3,17 @@
 const cellSize=30;
 const numOfColumns=8;
 const numOfRows=8;
+// careful, string-literal
+const strPuzzle1 = `
+0   1 11
+   3    
+13 5 4  
+ 2   31 
+  332  0
+     1  
+ 1 0 1  
+        `;
+
 
 // draws grid
 const drawGridLines=(ctx)=>{
@@ -29,6 +40,12 @@ const drawGridLines=(ctx)=>{
 const initialise = (ctx)=> {
   
   drawGridLines(ctx);
+
+  const grid = helpers.gridFromStringLiteral(strPuzzle1)
+  // weird undefined bug:issue without initialising constructor as 2d array of 0s... setting init state with grid causes error
   let currentGameBoard = new GameBoard([[0,0,0,0],[0,0,0,0]])
+  currentGameBoard.stateStateFromArray(grid)
+
+  console.log('currentGameBoard', currentGameBoard)
   
 }
