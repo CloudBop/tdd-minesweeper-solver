@@ -169,4 +169,24 @@ describe('Tests for the Game', () => {
     expect(currentGame.cells[5][7]).toEqual(-3)
   
   })
+
+  test('should use solution 2 to solve cell 0,4', () => {
+    let init = [[]]
+    const currentGame = new GameBoard(init)
+    currentGame.stateStateFromArray(gridFromStringLiteral(strPuzzle1))
+    let actualSolution = currentGame.solve();  
+    actualSolution = currentGame.solve();  
+    actualSolution = currentGame.solve();
+    actualSolution = currentGame.solve();
+
+    // assert from state here...
+    expect(actualSolution.description).toEqual("remaining neighbours of cell must be mine")
+    expect(actualSolution.cellOfInterest.col).toEqual(0);
+    expect(actualSolution.cellOfInterest.row).toEqual(2);
+    expect(actualSolution.solvedCells.length).toEqual(1);
+
+    expect(actualSolution.solvedCells.find(cell => cell.col === 0 && cell.row===3)).toBeDefined()
+    expect(currentGame.cells[3][0]).toEqual(-2)
+  })
+  
 })

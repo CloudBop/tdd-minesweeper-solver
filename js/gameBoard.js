@@ -105,6 +105,19 @@ class GameBoard {
     const neighbours = this.getNeighbours(row, col);
     return neighbours.filter(cell => this.cells[cell.row][cell.col] === this.unknownCell);
   };
+  solve(){
+    // 
+    let solution = this.methodOne();
+    
+    // cell must contain mine
+    if(!solution) solution = this.methodTwo();
+    
+    if(!solution) return {
+      description: "No results for any cells"
+    }
+    
+    return solution
+  }
   //
   methodOne() {
     for (let row = 0; row < this.numberOfRows; row++) {
@@ -141,14 +154,38 @@ class GameBoard {
     // nothing returned in this board iteration
     return null;
   }
-  solve(){
-    let solution = this.methodOne();
+  methodTwo() {
+    for (let row = 0; row < this.numberOfRows; row++) {
+      for (let col = 0; col < this.numberOfCols; col++) {
+        
+        const mineCount = this.doesCellContainsMineCount(row, col);
+        // (false >= 0) === true - ?avascript
+        if (mineCount >= 0) {
+          const neighboursWithMines = this.neighboursWithMines(row, col);
+          const neighboursWhichAreUnknown = this.neighboursWhichAreUnknown(row, col);
+          //
+          const minesLeftToPlace = mineCount - neighboursWithMines.length;
 
-    if(!solution) return {
-      description: "No results for any cells"
+          if (minesLeftToPlace > 0 && minesLeftToPlace === neighboursWhichAreUnknown.length) {
+            
+            neighboursWhichAreUnknown.forEach(cell => {
+              const { row, col } = cell;
+              // set to mine
+              this.cells[row][col] = this.mine;
+            });
+
+            return new Solution(
+              new CellLocation(row, col, mineCount),
+              neighboursWhichAreUnknown,
+              'remaining neighbours of cell must be mine'
+              // `remaining neighbours ${neighboursWhichAreUnknown.map( cell => `[${cell.row}, ${cell.col}]`)} around cell[${row}][${col}] must be mine`
+            );
+          }
+        }
+        //
+      }
     }
-
-    return solution
+    return null;
   }
 }
 
