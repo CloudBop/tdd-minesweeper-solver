@@ -188,5 +188,6 @@ class GameBoard {
     return null;
   }
 }
-
+// expose
 window.GameBoard = GameBoard
+window.CellLocation= CellLocation
