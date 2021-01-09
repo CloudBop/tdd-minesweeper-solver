@@ -1,7 +1,21 @@
+require('../js/helpers.js')
 require('../js/GameBoard')
+
+// careful, string-literal
+const strPuzzle1 = `
+0   1 11
+   3    
+13 5 4  
+ 2   31 
+  332  0
+     1  
+ 1 0 1  
+        `;
 // game contsructor
 const GameBoard = window.GameBoard
-
+const {
+  gridFromStringLiteral
+} = window.helpers
 describe('Tests for the Game', () => {
   
   test('should successfully invoke constructor', () => {
@@ -102,5 +116,57 @@ describe('Tests for the Game', () => {
     expect(actualSolution.solvedCells.find(cell => cell.col === 0 && cell.row===1)).toBeDefined();
     expect(actualSolution.solvedCells.find(cell => cell.col === 1 && cell.row===1)).toBeDefined();
     expect(actualSolution.solvedCells.find(cell => cell.col === 1 && cell.row===1)).toBeDefined();
+  })
+
+  //
+  test('should solve cell with 0 neighbours, initial iteration', () => {
+    let init = [[]]
+    const currentGame = new GameBoard(init)
+    currentGame.stateStateFromArray(gridFromStringLiteral(strPuzzle1))
+    let actualSolution = currentGame.solve();
+  
+    expect(actualSolution.description).toEqual('zero mines to place')
+  
+    expect(actualSolution.cellOfInterest.col).toEqual(0);
+    expect(actualSolution.cellOfInterest.row).toEqual(0);
+    
+    expect(actualSolution.solvedCells.length).toEqual(3);
+    expect(actualSolution.solvedCells.find(cell => cell.col === 0 && cell.row===0)).toBeUndefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 0 && cell.row===1)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 1 && cell.row===1)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 1 && cell.row===1)).toBeDefined();
+  
+    // check cells updated 
+    expect(currentGame.cells[0][1]).toEqual(-3)
+    expect(currentGame.cells[1][0]).toEqual(-3)
+    expect(currentGame.cells[1][1]).toEqual(-3)
+  
+  
+  })
+  //
+  test('should solve cell with 0 neighbours, second iteration iterations', () => {
+    let init = [[]]
+    const currentGame = new GameBoard(init)
+    currentGame.stateStateFromArray(gridFromStringLiteral(strPuzzle1))
+    let actualSolution = currentGame.solve();  
+    // second iteration
+    actualSolution = currentGame.solve();
+    expect(actualSolution.description).toEqual('zero mines to place')
+    expect(actualSolution.cellOfInterest.col).toEqual(7);
+    expect(actualSolution.cellOfInterest.row).toEqual(4);
+    expect(actualSolution.solvedCells.length).toEqual(4);
+    // 
+    expect(actualSolution.solvedCells.find(cell => cell.col === 7 && cell.row===3)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 6 && cell.row===4)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 6 && cell.row===5)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 7 && cell.row===5)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 70 && cell.row===50)).toBeUndefined();
+  
+    // check cells updated 
+    expect(currentGame.cells[3][7]).toEqual(-3)
+    expect(currentGame.cells[4][6]).toEqual(-3)
+    expect(currentGame.cells[5][6]).toEqual(-3)
+    expect(currentGame.cells[5][7]).toEqual(-3)
+  
   })
 })

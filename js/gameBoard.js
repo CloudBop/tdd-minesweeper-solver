@@ -67,7 +67,7 @@ class GameBoard {
         return cell;
     }
   }
-  cellContainsMineCount(row, col) {
+  doesCellContainsMineCount(row, col) {
     if (this.cells[row][col] >= 0) {
       return this.cells[row][col];
     }
@@ -111,7 +111,7 @@ class GameBoard {
       for (let col = 0; col < this.numberOfCols; col++) {
         
         // does cell contain a count ?
-        const mineCount = this.cellContainsMineCount(row, col);
+        const mineCount = this.doesCellContainsMineCount(row, col);
         if (mineCount >= 0) {
           // 
           const neighboursWithMines = this.neighboursWithMines(row, col);
