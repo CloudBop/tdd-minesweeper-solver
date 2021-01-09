@@ -3,6 +3,8 @@
 const cellSize=30;
 const numOfColumns=8;
 const numOfRows=8;
+// store ref of GameBoard
+let gameBoard = null
 // careful, string-literal
 const strPuzzle1 = `
 0   1 11
@@ -14,7 +16,20 @@ const strPuzzle1 = `
  1 0 1  
         `;
 
+// draws string
+function drawSymbol(ctx, symbol, col, row){
 
+  var text = ctx.measureText(symbol); // TextMetrics object
+  // console.log('text', text)
+  ctx.font = '20px serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'bottom';
+
+  var x = col*cellSize;
+  var y = row*cellSize;
+  // debugger
+  ctx.fillText(symbol, x+((cellSize-text.width)/2), y+((cellSize)/2));
+}
 // draws grid
 const drawGridLines=(ctx)=>{
   for (let column = 1; column < numOfColumns; column++) {
@@ -36,16 +51,53 @@ const drawGridLines=(ctx)=>{
   }
 }
 
+function populateCurrentGrid(ctx){
+  for (let row = 0; row < numOfRows; row++) {
+    for (let col = 0; col < numOfColumns; col++) {
+      ctx.fillStyle = "#000";
+      drawSymbol(ctx, gameBoard.cellContents(col, row), col,row);
+    }
+  }
+}
+
+function drawResult(ctx, solution){
+  // 
+  populateCurrentGrid(ctx)
+  // 
+  solution.solvedCells.forEach(cell => {
+    ctx.fillStyle = "#09ff15";
+    drawSymbol(ctx, gameBoard.cellContents(cell.col, cell.row), cell.col, cell.row);
+  });
+  
+  // current cell
+  ctx.fillStyle = "#ff0000";
+  drawSymbol(ctx, gameBoard.cellContents(solution.cellOfInterest.col, solution.cellOfInterest.row), solution.cellOfInterest.col, solution.cellOfInterest.row);
+
+  // TODO - responsive grid, text inside canvas
+  document.getElementById("solution-desc").innerHTML = solution.description
+
+}
 
 const initialise = (ctx)=> {
   
   drawGridLines(ctx);
-
   const grid = helpers.gridFromStringLiteral(strPuzzle1)
   // weird undefined bug:issue without initialising constructor as 2d array of 0s... setting init state with grid causes error
-  let currentGameBoard = new GameBoard([[0,0,0,0],[0,0,0,0]])
-  currentGameBoard.stateStateFromArray(grid)
+  gameBoard = new GameBoard([[0,0,0,0],[0,0,0,0]])
+  gameBoard.stateStateFromArray(grid)
+  populateCurrentGrid(ctx);
 
-  console.log('currentGameBoard', currentGameBoard)
-  
+  document.getElementById("solve").addEventListener('click', function(){
+    // overwrite previous render
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // try and solve
+    const result = gameBoard.solve()
+
+    gameBoard.cells[0][1]=-3
+    gameBoard.cells[1][0]=-3
+    gameBoard.cells[1][1]=-3
+    //
+    drawGridLines(ctx);
+    drawResult(ctx,result)
+  })
 }
