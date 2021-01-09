@@ -1,3 +1,5 @@
+Not really TDD... 
+
 A javascript 'clone' of David's mine sweeper solver. Bare bones Jest boilerplate, no build process.
 
 npm i to install project (just jest)
