@@ -19,16 +19,32 @@ const strPuzzle1 = `
 // draws string
 function drawSymbol(ctx, symbol, col, row){
 
-  var text = ctx.measureText(symbol); // TextMetrics object
-  // console.log('text', text)
-  ctx.font = '20px serif';
-  ctx.textBaseline = 'middle';
-  ctx.textAlign = 'bottom';
+  if(symbol==='!'){
+    
+    ctx.fillStyle = '#000';
+      // canvasCtx.fillRect(ballX,200, 25, 25)
+      ctx.beginPath();
+      var beginAngleRadians = 0
+      var endAngleRadians = Math.PI*2
+      var clockwise = true
+      var x = (col+1)*(cellSize);
+      var y = (row+1)*(cellSize);
 
-  var x = col*cellSize;
-  var y = row*cellSize;
-  // debugger
-  ctx.fillText(symbol, x+((cellSize-text.width)/2), y+((cellSize)/2));
+      ctx.arc(x-(cellSize/2), y-(cellSize/2), cellSize*0.3, beginAngleRadians, endAngleRadians, clockwise)
+      ctx.fill()
+    
+  } else {
+    var text = ctx.measureText(symbol); // TextMetrics object
+    // console.log('text', text)
+    ctx.font = '20px serif';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'bottom';
+  
+    var x = col*cellSize;
+    var y = row*cellSize;
+    // debugger
+    ctx.fillText(symbol, x+((cellSize-text.width)/2), y+((cellSize)/2));
+  }
 }
 // draws grid
 const drawGridLines=(ctx)=>{
