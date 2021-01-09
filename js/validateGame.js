@@ -18,6 +18,24 @@ class GameValidator {
         }
       }
     }
+    //
+    for (let row = 0; row < game.numberOfRows; row++) {
+      for (let col = 0; col < game.numberOfCols; col++) {
+        //
+        const mineCount = game.doesCellContainsMineCount(row, col);
+        // (false >= 0) === true - ?avascript
+        if (mineCount >= 0) {
+          const neighboursWithMines = game.neighboursWithMines(row, col).length;
+          const neighboursWhichAreUnknown = game.neighboursWhichAreUnknown(row, col).length;
+          //
+          if (mineCount > neighboursWithMines + neighboursWhichAreUnknown) {
+            //
+            return new ValidationResult(false, 'Too few mines', new CellLocation(row, col, mineCount));
+          }
+        }
+        //
+      }
+    }
   
     return new ValidationResult(true, 'OK');
   }
