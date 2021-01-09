@@ -19,6 +19,11 @@ class GameBoard {
       }
     }
   }
+  // 
+  cellContents(col,row) {
+    const cell = this.cells[row][col];
+    return cell
+  }
 }
 
 
