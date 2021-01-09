@@ -69,6 +69,8 @@ function drawResult(ctx, solution){
   //
   if (!solution.cellOfInterest) return 
 
+  document.getElementById("currentCell").innerHTML =  "[" + solution.cellOfInterest.row + "]["+ solution.cellOfInterest.col+"]"
+
   solution.solvedCells.forEach(cell => {
     ctx.fillStyle = "#15974b";
     drawSymbol(ctx, gameBoard.cellContents(cell.col, cell.row), cell.col, cell.row);

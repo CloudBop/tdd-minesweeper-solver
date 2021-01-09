@@ -111,6 +111,9 @@ class GameBoard {
     
     // cell must contain mine
     if(!solution) solution = this.methodTwo();
+
+    if(!solution) solution = this.methodThree();
+    if(!solution) solution = this.methodFour();
     
     if(!solution) return {
       description: "No results for any cells"
@@ -183,6 +186,118 @@ class GameBoard {
           }
         }
         //
+      }
+    }
+    return null;
+  }
+  // fill unknown with mine and re-play until board is invalid.
+  methodThree() {
+    // initiate new validator for current play
+    const Validator = new GameValidator();
+    // iterate board
+    for (let row = 0; row < this.numberOfRows; row++) {
+      for (let col = 0; col < this.numberOfCols; col++) {
+        //
+        if (this.cells[row][col] === this.unknownCell) {
+          // place mine
+          this.cells[row][col] = this.mine;
+          // track moves
+          const movesToUndo = [];
+          let solution;
+          do {
+            // try method one
+            solution = this.methodOne();
+            if (solution === null) {
+              // ../ method two
+              solution = this.methodTwo();
+            }
+            // if solution found
+            if (solution !== null && typeof solution === 'object') {
+              // track updated cells
+              movesToUndo.push(...solution.solvedCells);
+              // validate board
+              const result = Validator.validateBoard(this);
+              //
+              if (!result.isValid) {
+                // must be empty
+                this.cells[row][col] = this.empty;
+                // reset the moves
+                movesToUndo.forEach(cell => (this.cells[cell.row][cell.col] = this.unknownCell));
+                // 
+                return new Solution(
+                  result.cellOfInterest,
+                  [ new CellLocation(row, col) ],
+                  `cannot contain a mine, must be empty!`
+                );
+              }
+            }
+            // 
+          } while (solution !== null && typeof solution === 'object');
+
+          //
+          // no solution found
+          movesToUndo.forEach(cell => {
+            this.cells[cell.row][cell.col] = this.unknownCell;
+          });
+          // + current cell still unknown
+          this.cells[row][col] = this.unknownCell;
+        }
+      }
+    }
+    return null;
+  }
+  // fill unknown with empty and re-play until board is invalid. (inverse of above)
+  methodFour() {
+    // initiate new validator for current play
+    const Validator = new GameValidator();
+    // iterate board
+    for (let row = 0; row < this.numberOfRows; row++) {
+      for (let col = 0; col < this.numberOfCols; col++) {
+        //
+        if (this.cells[row][col] === this.unknownCell) {
+          // place mine
+          this.cells[row][col] = this.empty;
+          // track moves
+          const movesToUndo = [];
+          let solution;
+          do {
+            // try method one
+            solution = this.methodOne();
+            if (solution === null) {
+              // ../ method two
+              solution = this.methodTwo();
+            }
+            // if solution found
+            if (solution !== null && typeof solution === 'object') {
+              // track updated cells
+              movesToUndo.push(...solution.solvedCells);
+              // validate board
+              const result = Validator.validateBoard(this);
+              //
+              if (!result.isValid) {
+                // reset currentCell
+                this.cells[row][col] = this.mine;
+                // reset the moves
+                movesToUndo.forEach(cell => (this.cells[cell.row][cell.col] = this.unknownCell));
+                //
+                return new Solution(
+                  result.cellOfInterest,
+                  [ new CellLocation(row, col) ],
+                  `cannot be empty must contain a mine!`
+                );
+              }
+            }
+            // 
+          } while (solution !== null && typeof solution === 'object');
+
+          //
+          // no solution found
+          movesToUndo.forEach(cell => {
+            this.cells[cell.row][cell.col] = this.unknownCell;
+          });
+          // + current cell still unknown
+          this.cells[row][col] = this.unknownCell;
+        }
       }
     }
     return null;

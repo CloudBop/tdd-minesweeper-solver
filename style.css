@@ -3,12 +3,15 @@ body{
   justify-content: center;
   background-color: cornsilk;
 }
+canvas {
+  margin-top: 1rem;
+}
 #user-interface >header {
   margin: 1rem 0;
-  text-align: center;
+  text-align: left;
+  width: 400px;
 }
 
 #solution-desc {
-  font-size: 0.75rem;
   margin: 0.25rem;
 }

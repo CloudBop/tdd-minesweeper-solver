@@ -6,6 +6,7 @@
   <title>Minesweeper solver!</title>
 
   <script src="js/helpers.js"></script>
+  <script src="js/validateGame.js"></script>
   <script src="js/gameBoard.js"></script>
   <script src="js/gfx.js"></script>
   <script src="js/index.js"></script>
@@ -16,17 +17,21 @@
 </head>
 <body>
   <div id="user-interface">
-    <header>
-      <button id="solve">Solve</button>
-    </header>
 
-    <div id="solution-desc">
-      click to solve
-    </div>
 
     <!-- cells 30 by 30  -->
     <canvas id="minesweeperCanvas" width="240" height="240"></canvas>
 
+    <header>
+      <p>Solved: <span id="currentCell"></span></p>
+      
+      <div id="solution-desc">
+        click to solve
+      </div>
+      
+      <button id="solve">Solve</button>
+      
+    </header>
   </div>
   
 
