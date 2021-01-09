@@ -62,4 +62,45 @@ describe('Tests for the Game', () => {
     expect(result.cell5).toEqual("!")
     expect(result.cell6).toEqual("x")
   })
+
+  test("should return solution object", ()=>{
+
+    const initialState = [new Array(3),new Array(3)]
+    const currentGame = new GameBoard(initialState)
+    //
+    currentGame.stateStateFromArray([
+      ["0", "-1", "-2" ,"-3"],
+      ["-1", "-1", "-1" ,"4"]
+    ])
+    const result = currentGame.solve();
+    expect(result).toBeDefined();
+  })
+
+  //
+  test('should solve cell with 0 neighbours', () => {
+    // let shadow=`
+    // 0   1 11
+    //    4
+    // `
+    let init = [
+      [0,,,,1,,1,1],
+      [,,,3,,,,]
+    ]
+    const currentGame = new GameBoard(init)
+    currentGame.stateStateFromArray([
+      ["0", "-1", "-2" ,"-3"],
+      ["-1", "-1", "-1" ,"4"]
+    ])
+    const actualSolution = currentGame.solve();
+
+    expect(actualSolution.description).toEqual('zero mines to place')
+
+    expect(actualSolution.cellOfInterest.col).toEqual(0);
+    expect(actualSolution.cellOfInterest.row).toEqual(0);
+    
+    expect(actualSolution.solvedCells.length).toEqual(3);
+    expect(actualSolution.solvedCells.find(cell => cell.col === 0 && cell.row===1)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 1 && cell.row===1)).toBeDefined();
+    expect(actualSolution.solvedCells.find(cell => cell.col === 1 && cell.row===1)).toBeDefined();
+  })
 })

@@ -64,8 +64,13 @@ function drawResult(ctx, solution){
   // 
   populateCurrentGrid(ctx)
   // 
+  // TODO - responsive grid, text inside canvas
+  document.getElementById("solution-desc").innerHTML = solution.description
+  //
+  if (!solution.cellOfInterest) return 
+
   solution.solvedCells.forEach(cell => {
-    ctx.fillStyle = "#09ff15";
+    ctx.fillStyle = "#15974b";
     drawSymbol(ctx, gameBoard.cellContents(cell.col, cell.row), cell.col, cell.row);
   });
   
@@ -73,9 +78,7 @@ function drawResult(ctx, solution){
   ctx.fillStyle = "#ff0000";
   drawSymbol(ctx, gameBoard.cellContents(solution.cellOfInterest.col, solution.cellOfInterest.row), solution.cellOfInterest.col, solution.cellOfInterest.row);
 
-  // TODO - responsive grid, text inside canvas
-  document.getElementById("solution-desc").innerHTML = solution.description
-
+  
 }
 
 const initialise = (ctx)=> {
@@ -92,10 +95,6 @@ const initialise = (ctx)=> {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // try and solve
     const result = gameBoard.solve()
-
-    gameBoard.cells[0][1]=-3
-    gameBoard.cells[1][0]=-3
-    gameBoard.cells[1][1]=-3
     //
     drawGridLines(ctx);
     drawResult(ctx,result)
