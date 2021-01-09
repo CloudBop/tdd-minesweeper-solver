@@ -1,0 +1,1 @@
+A javascript 'clone' of David's mine sweeper solver. Bare bones Jest boilerplate.
