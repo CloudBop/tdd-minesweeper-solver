@@ -18,5 +18,20 @@ describe('Tests for the Game', () => {
     expect(currentGame.numberOfCols).toEqual(3)
   })
 
+  test('should return correct cell value', () => {
+    const initialState = [new Array(3),new Array(3)]
+    
+    initialState[0][1] = 7
+    initialState[1][2] = 1 
+
+    const currentGame = new GameBoard(initialState)
+    const result ={
+      cell1: currentGame.cellContents(1,0),
+      cell2: currentGame.cellContents(2,1)
+    }
+  
+    expect(result.cell1).toEqual(7)
+    expect(result.cell2).toEqual(1)
+  })
   
 })
